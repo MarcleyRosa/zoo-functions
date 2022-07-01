@@ -23,6 +23,4 @@ function countAnimals(animal) {
   }
 }
 
-countAnimals();
-
 module.exports = countAnimals;

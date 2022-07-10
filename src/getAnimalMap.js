@@ -2,165 +2,92 @@ const data = require('../data/zoo_data');
 
 const { species } = data;
 
-const speciesNE = species.filter((e) => e.location === 'NE').map((el) => el.residents);
-const speciesNW = species.filter((e) => e.location === 'NW').map((el) => el.residents);
-const speciesSE = species.filter((e) => e.location === 'SE').map((el) => el.residents);
-const speciesSW = species.filter((e) => e.location === 'SW').map((el) => el.residents);
+const namesLoc = (reg, loc) => species.filter((e) => e.location === reg).map((el) => el[loc]);
+
+const speciesLoc = (reg, loc, pos, tSex) => species.filter((e) => e.location === reg)
+  .map((el) => el[loc])[pos].filter((e) => e.sex === tSex).map((elem) => elem.name);
+
+const speName = (reg, pos) => species.filter((e) => e.location === reg)
+  .map((el) => el.residents)[pos].map((el) => el.name);
 
 const locationAnimal = () => {
-  const namesNE = species.filter((e) => e.location === 'NE').map((el) => el.name);
-  const namesNW = species.filter((e) => e.location === 'NW').map((el) => el.name);
-  const namesSE = species.filter((e) => e.location === 'SE').map((el) => el.name);
-  const namesSW = species.filter((e) => e.location === 'SW').map((el) => el.name);
   const objetoLocation = {
-    NE: namesNE,
-    NW: namesNW,
-    SE: namesSE,
-    SW: namesSW,
+    NE: namesLoc('NE', 'name'),
+    NW: namesLoc('NW', 'name'),
+    SE: namesLoc('SE', 'name'),
+    SW: namesLoc('SW', 'name'),
   };
   return objetoLocation;
 };
-const sortAnimal = () => {
+const getSort = () => (a, b) => a.localeCompare(b);
+const noSort = () => (a, b) => a - b;
+
+const sortAnimal = (func) => {
   const objetoLocation = {
     NE: [
-      { lions: speciesNE[0].map((el) => el.name).sort() },
-      { giraffes: speciesNE[1].map((el) => el.name).sort() }],
+      { [namesLoc('NE', 'name')[0]]: speName('NE', '0').sort(func) },
+      { [namesLoc('NE', 'name')[1]]: speName('NE', '1').sort(func) }],
     NW: [
-      { tigers: speciesNW[0].map((el) => el.name).sort() },
-      { bears: speciesNW[1].map((el) => el.name).sort() },
-      { elephants: speciesNW[2].map((el) => el.name).sort() }],
+      { [namesLoc('NW', 'name')[0]]: speName('NW', '0').sort(func) },
+      { [namesLoc('NW', 'name')[1]]: speName('NW', '1').sort(func) },
+      { [namesLoc('NW', 'name')[2]]: speName('NW', '2').sort(func) }],
     SE: [
-      { penguins: speciesSE[0].map((el) => el.name).sort() },
-      { otters: speciesSE[1].map((el) => el.name).sort() }],
+      { [namesLoc('SE', 'name')[0]]: speName('SE', '0').sort(func) },
+      { [namesLoc('SE', 'name')[1]]: speName('SE', '1').sort(func) }],
     SW: [
-      { frogs: speciesSW[0].map((el) => el.name).sort() },
-      { snakes: speciesSW[1].map((el) => el.name).sort() }],
+      { [namesLoc('SW', 'name')[0]]: speName('SW', '0').sort(func) },
+      { [namesLoc('SW', 'name')[1]]: speName('SW', '1').sort(func) }],
   };
   return objetoLocation;
 };
 
-const Animal = () => {
+const sortSexAnimal = (typeSex, func) => {
   const objetoLocation = {
     NE: [
-      { lions: speciesNE[0].map((el) => el.name) },
-      { giraffes: speciesNE[1].map((el) => el.name) }],
+      { [namesLoc('NE', 'name')[0]]: speciesLoc('NE', 'residents', '0', typeSex).sort(func) },
+      { [namesLoc('NE', 'name')[1]]: speciesLoc('NE', 'residents', '1', typeSex).sort(func) }],
     NW: [
-      { tigers: speciesNW[0].map((el) => el.name) },
-      { bears: speciesNW[1].map((el) => el.name) },
-      { elephants: speciesNW[2].map((el) => el.name) }],
+      { [namesLoc('NW', 'name')[0]]: speciesLoc('NW', 'residents', '0', typeSex).sort(func) },
+      { [namesLoc('NW', 'name')[1]]: speciesLoc('NW', 'residents', '1', typeSex).sort(func) },
+      { [namesLoc('NW', 'name')[2]]: speciesLoc('NW', 'residents', '2', typeSex).sort(func) }],
     SE: [
-      { penguins: speciesSE[0].map((el) => el.name) },
-      { otters: speciesSE[1].map((el) => el.name) }],
+      { [namesLoc('SE', 'name')[0]]: speciesLoc('SE', 'residents', '0', typeSex).sort(func) },
+      { [namesLoc('SE', 'name')[1]]: speciesLoc('SE', 'residents', '1', typeSex).sort(func) }],
     SW: [
-      { frogs: speciesSW[0].map((el) => el.name) },
-      { snakes: speciesSW[1].map((el) => el.name) }],
+      { [namesLoc('SW', 'name')[0]]: speciesLoc('SW', 'residents', '0', typeSex).sort(func) },
+      { [namesLoc('SW', 'name')[1]]: speciesLoc('SW', 'residents', '1', typeSex).sort(func) }],
   };
   return objetoLocation;
 };
-const sexMaleAnimal = () => {
-  const objetoLocation = {
-    NE: [
-      { lions: speciesNE[0].filter((e) => e.sex === 'male').map((el) => el.name) },
-      { giraffes: speciesNE[1].filter((e) => e.sex === 'male').map((el) => el.name) }],
-    NW: [
-      { tigers: speciesNW[0].filter((e) => e.sex === 'male').map((el) => el.name) },
-      { bears: speciesNW[1].filter((e) => e.sex === 'male').map((el) => el.name) },
-      { elephants: speciesNW[2].filter((e) => e.sex === 'male').map((el) => el.name) }],
-    SE: [
-      { penguins: speciesSE[0].filter((e) => e.sex === 'male').map((el) => el.name) },
-      { otters: speciesSE[1].filter((e) => e.sex === 'male').map((el) => el.name) }],
-    SW: [
-      { frogs: speciesSW[0].filter((e) => e.sex === 'male').map((el) => el.name) },
-      { snakes: speciesSW[1].filter((e) => e.sex === 'male').map((el) => el.name) }],
-  };
-  return objetoLocation;
-};
-const sexFemaleAnimal = () => {
-  const objetoLocation = {
-    NE: [
-      { lions: speciesNE[0].filter((e) => e.sex === 'female').map((el) => el.name) },
-      { giraffes: speciesNE[1].filter((e) => e.sex === 'female').map((el) => el.name) }],
-    NW: [
-      { tigers: speciesNW[0].filter((e) => e.sex === 'female').map((el) => el.name) },
-      { bears: speciesNW[1].filter((e) => e.sex === 'female').map((el) => el.name) },
-      { elephants: speciesNW[2].filter((e) => e.sex === 'female').map((el) => el.name) }],
-    SE: [
-      { penguins: speciesSE[0].filter((e) => e.sex === 'female').map((el) => el.name) },
-      { otters: speciesSE[1].filter((e) => e.sex === 'female').map((el) => el.name) }],
-    SW: [
-      { frogs: speciesSW[0].filter((e) => e.sex === 'female').map((el) => el.name) },
-      { snakes: speciesSW[1].filter((e) => e.sex === 'female').map((el) => el.name) }],
-  };
-  return objetoLocation;
-};
-const sortSexMaleAnimal = () => {
-  const objetoLocation = {
-    NE: [
-      { lions: speciesNE[0].filter((e) => e.sex === 'male').map((el) => el.name).sort() },
-      { giraffes: speciesNE[1].filter((e) => e.sex === 'male').map((el) => el.name).sort() }],
-    NW: [
-      { tigers: speciesNW[0].filter((e) => e.sex === 'male').map((el) => el.name).sort() },
-      { bears: speciesNW[1].filter((e) => e.sex === 'male').map((el) => el.name).sort() },
-      { elephants: speciesNW[2].filter((e) => e.sex === 'male').map((el) => el.name).sort() }],
-    SE: [
-      { penguins: speciesSE[0].filter((e) => e.sex === 'male').map((el) => el.name).sort() },
-      { otters: speciesSE[1].filter((e) => e.sex === 'male').map((el) => el.name).sort() }],
-    SW: [
-      { frogs: speciesSW[0].filter((e) => e.sex === 'male').map((el) => el.name).sort() },
-      { snakes: speciesSW[1].filter((e) => e.sex === 'male').map((el) => el.name).sort() }],
-  };
-  return objetoLocation;
-};
-const sortSexFemaleAnimal = () => {
-  const objetoLocation = {
-    NE: [
-      { lions: speciesNE[0].filter((e) => e.sex === 'female').map((el) => el.name).sort() },
-      { giraffes: speciesNE[1].filter((e) => e.sex === 'female').map((el) => el.name).sort() }],
-    NW: [
-      { tigers: speciesNW[0].filter((e) => e.sex === 'female').map((el) => el.name).sort() },
-      { bears: speciesNW[1].filter((e) => e.sex === 'female').map((el) => el.name).sort() },
-      { elephants: speciesNW[2].filter((e) => e.sex === 'female').map((el) => el.name).sort() }],
-    SE: [
-      { penguins: speciesSE[0].filter((e) => e.sex === 'female').map((el) => el.name).sort() },
-      { otters: speciesSE[1].filter((e) => e.sex === 'female').map((el) => el.name).sort() }],
-    SW: [
-      { frogs: speciesSW[0].filter((e) => e.sex === 'female').map((el) => el.name).sort() },
-      { snakes: speciesSW[1].filter((e) => e.sex === 'female').map((el) => el.name).sort() }],
-  };
-  return objetoLocation;
-};
-const maleSort = (options) => {
-  const valueObj = Object.values(options);
-  const keyObj = Object.keys(options);
+
+const maleSort = (options, valueObj, keyObj) => {
   if (valueObj.includes('male') && keyObj.includes('sorted')) {
-    return sortSexMaleAnimal();
+    return sortSexAnimal('male', getSort());
   }
   if (valueObj.includes('male')) {
-    return sexMaleAnimal();
+    return sortSexAnimal('male', noSort());
   }
 };
-const femaleSort = (options) => {
-  const valueObj = Object.values(options);
-  const keyObj = Object.keys(options);
+const femaleSort = (options, valueObj, keyObj) => {
   if (valueObj.includes('female') && keyObj.includes('sorted')) {
-    return sortSexFemaleAnimal();
+    return sortSexAnimal('female', getSort());
   }
   if (valueObj.includes('female')) {
-    return sexFemaleAnimal();
+    return sortSexAnimal('female', noSort());
   }
 };
 const comp = (options, valueObj, keyObj) => {
   if (valueObj.includes('female')) {
-    return femaleSort(options);
+    return femaleSort(options, valueObj, keyObj);
   }
   if (valueObj.includes('male')) {
-    return maleSort(options);
+    return maleSort(options, valueObj, keyObj);
   }
   if (keyObj.includes('sorted')) {
-    return sortAnimal();
+    return sortAnimal(getSort());
   }
   if (keyObj.includes('includeNames')) {
-    return Animal();
+    return sortAnimal(noSort());
   }
 };
 
@@ -175,7 +102,5 @@ function getAnimalMap(options) {
   }
   return comp(options, valueObj, keyObj);
 }
-
-getAnimalMap({ sex: 'female' });
 
 module.exports = getAnimalMap;
